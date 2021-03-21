@@ -17,7 +17,17 @@ package com.example.androiddevchallenge.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val purple200 = Color(0xFFBB86FC)
-val purple500 = Color(0xFF6200EE)
-val purple700 = Color(0xFF3700B3)
-val teal200 = Color(0xFF03DAC5)
+// Rain
+val OxfordBlue = Color(0xFF03254E)
+val RainText = Color(0xFFFDFFFC)
+
+// Clear
+val Orange = Color(0xFFFB4D3D)
+val Yellow = Color(0xFFF7B32B)
+val Champagne = Color(0xFFFCF6B1)
+val ClearText = Color(0xFF2D1E2F)
+
+// Snow
+val Snow = Color(0xFFFDFFFC)
+val SnowFlakes = Color(0xFFA790A5)
+val SnowText = Color(0xFF3C3744)

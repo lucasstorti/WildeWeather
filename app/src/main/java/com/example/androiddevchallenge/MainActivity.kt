@@ -18,44 +18,100 @@ package com.example.androiddevchallenge
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.androiddevchallenge.ui.theme.MyTheme
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+import com.example.androiddevchallenge.library.models.WeatherType
+import com.example.androiddevchallenge.library.models.cities
+import com.example.androiddevchallenge.ui.components.ClearAnimation
+import com.example.androiddevchallenge.ui.components.RainAnimation
+import com.example.androiddevchallenge.ui.components.SelectedCity
+import com.example.androiddevchallenge.ui.components.SnowAnimation
+import com.example.androiddevchallenge.ui.theme.*
+import com.example.wildeweather.ui.components.CityButton
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyTheme {
-                MyApp()
+            WildeWeatherTheme {
+                WildeWeather()
             }
         }
     }
 }
 
-// Start building your app here!
 @Composable
-fun MyApp() {
-    Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
-    }
-}
+fun WildeWeather() {
+    var selectedCity by remember { mutableStateOf(cities[0]) }
+    val scrollState = rememberScrollState()
 
-@Preview("Light Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun LightPreview() {
-    MyTheme {
-        MyApp()
-    }
-}
+    val transition = updateTransition(selectedCity)
 
-@Preview("Dark Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun DarkPreview() {
-    MyTheme(darkTheme = true) {
-        MyApp()
+    val backgroundTopColor: Color by transition.animateColor {
+        when (it.weatherType) {
+            WeatherType.SNOW -> Snow
+            WeatherType.RAIN -> OxfordBlue
+            WeatherType.CLEAR ->  Yellow
+        }
+    }
+
+    val backgroundBottomColor: Color by transition.animateColor {
+        when (it.weatherType) {
+            WeatherType.SNOW -> SnowFlakes
+            WeatherType.RAIN -> OxfordBlue
+            WeatherType.CLEAR ->  Orange
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        backgroundTopColor,
+                        backgroundBottomColor
+                    )
+                )
+            )
+    ) {
+        Crossfade(targetState = selectedCity) {
+            when (it.weatherType) {
+                WeatherType.SNOW -> SnowAnimation()
+                WeatherType.RAIN -> RainAnimation()
+                WeatherType.CLEAR -> ClearAnimation()
+            }
+        }
+        Column(
+            Modifier
+                .fillMaxHeight()
+                .fillMaxWidth()) {
+            SelectedCity(
+                modifier = Modifier.weight(1f),
+                city = selectedCity,
+                transition = transition,
+            )
+            Row(Modifier.horizontalScroll(scrollState)) {
+                cities.forEach { city ->
+                    CityButton(
+                        city = city,
+                        selectedCity = selectedCity,
+                        onClick = { selectedCity = it }
+                    )
+                }
+            }
+        }
     }
 }
