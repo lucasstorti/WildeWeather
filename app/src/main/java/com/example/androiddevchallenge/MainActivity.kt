@@ -23,24 +23,33 @@ import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import com.example.androiddevchallenge.library.models.WeatherType
 import com.example.androiddevchallenge.library.models.cities
+import com.example.androiddevchallenge.ui.components.CityButton
 import com.example.androiddevchallenge.ui.components.ClearAnimation
 import com.example.androiddevchallenge.ui.components.RainAnimation
 import com.example.androiddevchallenge.ui.components.SelectedCity
 import com.example.androiddevchallenge.ui.components.SnowAnimation
-import com.example.androiddevchallenge.ui.theme.*
-import com.example.wildeweather.ui.components.CityButton
+import com.example.androiddevchallenge.ui.theme.Orange
+import com.example.androiddevchallenge.ui.theme.OxfordBlue
+import com.example.androiddevchallenge.ui.theme.Snow
+import com.example.androiddevchallenge.ui.theme.SnowFlakes
+import com.example.androiddevchallenge.ui.theme.WildeWeatherTheme
+import com.example.androiddevchallenge.ui.theme.Yellow
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +73,7 @@ fun WildeWeather() {
         when (it.weatherType) {
             WeatherType.SNOW -> Snow
             WeatherType.RAIN -> OxfordBlue
-            WeatherType.CLEAR ->  Yellow
+            WeatherType.CLEAR -> Yellow
         }
     }
 
@@ -72,7 +81,7 @@ fun WildeWeather() {
         when (it.weatherType) {
             WeatherType.SNOW -> SnowFlakes
             WeatherType.RAIN -> OxfordBlue
-            WeatherType.CLEAR ->  Orange
+            WeatherType.CLEAR -> Orange
         }
     }
 
@@ -97,7 +106,8 @@ fun WildeWeather() {
         Column(
             Modifier
                 .fillMaxHeight()
-                .fillMaxWidth()) {
+                .fillMaxWidth()
+        ) {
             SelectedCity(
                 modifier = Modifier.weight(1f),
                 city = selectedCity,

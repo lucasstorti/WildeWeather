@@ -1,6 +1,26 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.androiddevchallenge.ui.components
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +41,7 @@ val DROP_HEIGHT = 30.dp
 const val NUMBER_OF_DROPS = 20
 const val ANIMATION_TARGET_VALUE = 5f
 
-data class DropData (
+data class DropData(
     val width: Dp,
     val height: Dp,
     val offsetX: Dp,
@@ -45,7 +65,7 @@ fun RainAnimation(
     )
 
     val dropList = mutableListOf<DropData>()
-    for(i in 0 until NUMBER_OF_DROPS) {
+    for (i in 0 until NUMBER_OF_DROPS) {
         val randomAnimationStart = (0..(ANIMATION_TARGET_VALUE - 2).toInt()).random()
         val randomAnimationEnd = (randomAnimationStart + 1..ANIMATION_TARGET_VALUE.toInt()).random()
 
@@ -60,16 +80,18 @@ fun RainAnimation(
         dropList.add(drop)
     }
 
-    Canvas(modifier = modifier
-        .fillMaxWidth()
-        .fillMaxHeight()) {
+    Canvas(
+        modifier = modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+    ) {
         translate(top = -DROP_HEIGHT.toPx()) {
             val leftoverSpace = size.width - (NUMBER_OF_DROPS * DROP_WIDTH.toPx())
             for (i in 0 until NUMBER_OF_DROPS) {
                 val drop = dropList[i]
                 val paddingHorizontal = (leftoverSpace / (NUMBER_OF_DROPS - 1)) * i
                 val topMargin =
-                    if (animatedValue >= drop.animationStartValue && animatedValue <= drop.animationEndValue )
+                    if (animatedValue >= drop.animationStartValue && animatedValue <= drop.animationEndValue)
                         ((animatedValue - drop.animationStartValue) / (drop.animationEndValue - drop.animationStartValue)) * size.height
                     else
                         0f
